@@ -1,4 +1,4 @@
 MBWG
 ====
 
-code used in data analysis for CCQM MBWG Microbial Identity Studies
+Code used in analysing data generated during CCQM MBWG Microbial Identity Studies

@@ -2,8 +2,8 @@
 
 #
 # pipeline for processing data from CCQM study
-# by: nate olson
-# orgaisation: NIST
+# by: Nate Olson
+# organization: NIST
 # written 03/11/2013
 #
 # requirements:
@@ -83,24 +83,19 @@ get_metadata_and_process_dataset (){
 	# 4. sample ID - lab that performed the sequencing
 	# 5. sequencing unit - replicate number (1 for most)
 	# 6. sequencing platform
-	# 7. strain source
-	# 8. trim to specific genus (T or F)
 	
 	local meta_line=$1
-	data_set=$(echo $meta_line | cut -f1 -d ',')
-	org=$(echo $meta_line | cut -d ',' -f2)
-	method=$(echo $meta_line | cut -d ',' -f3)
-	lab=$(echo $meta_line | cut -d ',' -f4)
-	rep=$(echo $meta_line | cut -d ',' -f5)
-	se=$(echo $meta_line | cut -d ',' -f6)
-	st=$(echo $meta_line | cut -d ',' -f7)
-	trim=$(echo $meta_line | cut -d ',' -f8)
+	data_set= $(echo $meta_line | cut -d ',' -f1)
+	org=      $(echo $meta_line | cut -d ',' -f2)
+	method=   $(echo $meta_line | cut -d ',' -f3)
+	lab=      $(echo $meta_line | cut -d ',' -f4)
+	rep=      $(echo $meta_line | cut -d ',' -f5)
+	se=       $(echo $meta_line | cut -d ',' -f6)
 	
 	echo "Working on:"	
 	echo "$data_set $org $method $lab $rep $se $st $trim"
 	
 	# modifying datafile names for analysis 
-	# will I want to move the analysis into a specific folder?
 	cp $data_set "$org-$se-$lab-$rep-$st-$trim.fastq"
 	fastq="$org-$se-$lab-$rep-$st-$trim.fastq"
 	

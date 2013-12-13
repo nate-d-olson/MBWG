@@ -1,6 +1,6 @@
 ##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#########################%%%%%%%
 ##
-## Proportion plots for biologically variant positions
+## Proportion analysis and plots for biologically variant positions
 ## written by: Nate Olson
 ## May 2013
 ## Modified 7/20/2013 - cleanup for release on github

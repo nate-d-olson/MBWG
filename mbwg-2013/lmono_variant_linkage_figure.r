@@ -2,7 +2,7 @@ setwd("~/Documents/CCQM/lmono_full_length_analysis/")
 library(reshape2)
 library(ggplot2)
 
-
+# input files are parsed sam files using SAM_parse.py 
 sam_csv <- list.files()[grep("+.csv", c(list.files()), value = F)]
 
 #generating a dataframe combining the pileup parse files
@@ -24,12 +24,10 @@ ggplot(biovars_df[biovars_df$variants %in% var_strings,]) + geom_bar(aes(x = var
 ggplot(biovars_df[biovars_df$variants %in% var_strings,]) + geom_bar(aes(x = variants)) + facet_wrap(~dataset, scale = "free_y")
 dev.off()
 
-#modification of dataset for Steve
-#need to remove filtered datasets
+#modification of dataset for maximum likelihood analysis
 unfiltered <- unique(biovars_df$dataset)[grep("F.csv", unique(biovars_df$dataset), value = F)]
 biovars_df_unfilt <- biovars_df[biovars_df$dataset %in% unfiltered,]
-steve <- dcast(biovars_df_unfilt, variants~dataset)
+biovars_cast <- dcast(biovars_df_unfilt, variants~dataset)
 
 strings <- c("GTA", "GTG", "GCA","GCG","TTA", "TTG", "TCA","TCG")
-steve2 <- steve[steve$variants %in% strings,]
-write.csv(steve2, "~/Desktop/copy_proportions.csv")
+write.csv(biovars_cast[biovars_cast$variants %in% strings,], "~/Desktop/copy_proportions.csv")

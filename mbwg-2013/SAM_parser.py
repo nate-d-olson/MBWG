@@ -1,9 +1,9 @@
 ################################################################################
-## Script for parsing SAM file for input creating a csv file for statistical
-## Analysis of sequencing errors in R
+## Script for parsing SAM file 
 ##
 ## Created by: Nate Olson
 ## October 18, 2012
+## Modified July, 2013
 ##
 ## parsing based on SAM format specifications v1.4-r985, September 7, 2011
 ################################################################################
@@ -20,12 +20,10 @@ DESCRIPTION
 
     Converts pileup file to a tab separated
     file with individual bases as rows in the document.
+    Only positions where the reference is amgibious are written to file.
 
 USAGE
     Input file must be labeled .pileup for script to function
-
-    Large datsets must be filtered as output files have as many
-    rows as bases in the pileup file
     
     output filter - ***need to incorporate this function***
         -ft Filter type - use to state whether to retain or exclude
@@ -37,9 +35,6 @@ USAGE
                         location: start middle end
                         read direction: forward reverse
 
-### add in this function
-snp_summary     Parse samtools consensus pileup and output penetrance summary of snps
-                        Tab delimited file with: seq_id, position, ref_base, consensus_base, fraction A, C, G, T
 AUTHOR
 
         Nate Olson <nolson@nist.gov>
@@ -136,7 +131,10 @@ def sam_expand(sam_file, ref_file, output_file):
 			    seq_value = sequence[seq_qual_pos]
 			    qual_value = ord(qual[seq_qual_pos]) - 33
 			    ref_value = '*'
-			    if ref_position % 1 != 0: #incrementing by 0.05 to incorporate insertions, approach only works for 20 insertions
+			    if ref_position % 1 != 0: 
+					''' incrementing by 0.05 to incorporate 
+					    insertions, approach only works 
+					    for 20 insertions '''
 				ref_position = ref_position + 0.05
 		            else:
 				ref_position = ref_pos + 0.05
@@ -159,9 +157,17 @@ def sam_expand(sam_file, ref_file, output_file):
 			else:
 			    continue
 
-			# writing values to output file
+			# writing values to output file - only outputs positions where the reference is an ambiguous base
 			if ref_value not in ["A","C","G","T","*"] and cigar[i] == "M":
-				samTOcsv.write(lineSplit[0] + ',' + lineSplit[2]  + ',' + ref_value + ',' + lineSplit[4] + ',' +  cigar[i] + ',' + seq_value + ',' + str(qual_value) + ',' + str(seq_qual_pos) + ',' + str(ref_position) + '\n')
+				samTOcsv.write(lineSplit[0] + ',' + 
+						lineSplit[2]  + ',' + 
+						ref_value + ',' + 
+						lineSplit[4] + ',' +  
+						cigar[i] + ',' + 
+						seq_value + ',' + 
+						str(qual_value) + ',' + 
+						str(seq_qual_pos) + ',' + 
+						str(ref_position) + '\n')
 				int(seq_qual_pos)
 	samTOcsv.close()
 	sam.close()
