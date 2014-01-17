@@ -11,7 +11,7 @@ library(reshape2)
 
 # set working directory for CCQM folder with pileup.csv files (generated using ccqm_pipe.sh)
 # will need to change to the appropriate location for local computer
-setwd("~/Documents/CCQM/CCQM_Analysis_Results/pileup_parse/")
+setwd("/media/second/mirror/CCQM/Identity-Study-I/CCQM_Analysis_Results/pileup_parse/")
 
 #######
 ## Import of pileup files parsed using PileUpParse.pl
@@ -19,7 +19,7 @@ setwd("~/Documents/CCQM/CCQM_Analysis_Results/pileup_parse/")
 ## ORG-PLATFORM-LAB-REPLICATE.pileup.csv
 #######
 
-pileup_csv <- list.files()[grep(".pileup.csv", c(list.files()), value = F)]
+pileup_csv <- list.files()[grep("F.pileup.csv", c(list.files()), value = F)]
 
 #generating a dataframe combining the pileup parse files
 pileup = data.frame()
@@ -43,7 +43,9 @@ ggplot(pileup) +
 		linetype = org, 
 		group = data_set)) + 
   facet_wrap(~platform) + scale_y_log10() + 
-  labs(y = "Coverage (log10)", x = "Reference Location (bp)")
+  labs(y = "Coverage", x = "Reference Location (bp)", color = "Participants", linetype = "Organisms") +
+  theme_bw() +
+  theme(legend.position = "bottom", legend.direction = "horizontal")
 
 
 

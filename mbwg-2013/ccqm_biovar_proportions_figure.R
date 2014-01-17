@@ -13,8 +13,8 @@ library(plyr)
 
 # set working directory for variant_analysis folder
 # will need to change to the appropriate location for local computer
-setwd("~/Documents/CCQM/CCQM_Analysis_Results/pileup_parse/")
-pileup_csv <- list.files()[grep("pileup.csv$", c(list.files()), value = F)]
+setwd("~/Documents/mirror/CCQM/Identity-Study-I/CCQM_Analysis_Results/pileup_parse/")
+pileup_csv <- list.files()[grep("F.pileup.csv$", c(list.files()), value = F)]
 
 # generating a dataframe combining the pileup parse files
 pileup_parse = data.frame()
@@ -93,17 +93,27 @@ for(i in 1:nrow(pileup_parse)){
 
 pileup_parse <- data.frame(cbind(pileup_parse, prop, max_copy, max_prob))
 pileup_parse$ratio[pileup_parse$Location %in% 
-				c(975,979, 983,992:996,1011,175,419)] <- "high"
+				c(975,979, 983,992:996,1011)] <- "6:1"
 pileup_parse$ratio[pileup_parse$Location %in% 
-				c(118,1395,188)]                      <- "even"
+				c(118,1395)]                      <- "4:3"
+pileup_parse$ratio[pileup_parse$Location %in% 
+                     c(175,419)] <- "5:1"
+pileup_parse$ratio[pileup_parse$Location %in% 
+                     c(188)]                      <- "3:3"
 
 pileup_parse$max_copy <- as.factor(pileup_parse$max_copy)
 pileup_parse$Location <- as.factor(pileup_parse$Location)
 
-
+expected = data.frame(ratio = rep(c("3:3","4:3", "5:1","6:1"), 3), 
+                      exp = rep(c(0.5,4/7,5/6,6/7), 3), 
+                      platform = rep(c("454","ION","Sanger"), each = 4))
 # code for figure
 ggplot(pileup_parse) + 
-  geom_jitter(aes(x = platform, y = prop, color = max_copy, shape  = lab),
-              position = position_jitter(width = .25)) + 
-  facet_grid(ratio~org, scale = "free_x") + 
-  labs(x = "Platform", y = "Proportions", shape = "Participants", color = "Abundant\nBase\nCount")
+  geom_hline(data = expected, aes(yintercept = exp), linetype = 2, alpha = 0.5) + 
+  geom_jitter(aes(x = Location, y = prop, color = max_copy, shape  = lab),
+              position = position_jitter(width = .15)) + 
+  facet_grid(platform~ratio, scale = "free_x", space = "free") + 
+  theme_bw() + 
+  theme(legend.position = "bottom", legend.direction = "horizontal") + 
+  labs(x = "Base Position", y = "Proportions", shape = "Participants", color = "Abundant\nBase\nCount")
+  
